@@ -7,7 +7,6 @@
     <string name="com.twitter.sdk.android.CONSUMER_SECRET">2Uov8wp8sQWccy1oRRes7Q3VgWfsTE1tokYHblse9TTaF0BW1b</string>
 
 
-
     <!-- Sign In -->
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -23,14 +22,12 @@
     <string name="signout_fail_null">이메일과 비밀번호를 입력해주세요</string>
 
 
-
     <!-- Bottom Navigation View -->
     <string name="home">home</string>
     <string name="search">Search</string>
     <string name="gallery">Gallery</string>
     <string name="favorite">Favorite</string>
     <string name="account">Account</string>
-
 
 
     <!-- Account -->
@@ -43,7 +40,6 @@
     <string name="count_0">0</string>
 
 
-
     <!-- Alarm -->
     <string name="alarm_favorite">님이 좋아요를 눌렀습니다.</string>
     <string name="alarm_who">님이&#160;</string>
@@ -51,10 +47,8 @@
     <string name="alarm_follow">님이 당신의 계정을 팔로워하기 시작했습니다.</string>
 
 
-
     <!-- Comment -->
     <string name="send">보내기</string>
-
 
 
     <!-- Add Photo -->
@@ -62,7 +56,6 @@
     <string name="hint_image_content">내용</string>
     <string name="upload_success">업로드 성공</string>
     <string name="upload_fail">업로드 실패</string>
-
 
 
     <!-- Toolbar -->
