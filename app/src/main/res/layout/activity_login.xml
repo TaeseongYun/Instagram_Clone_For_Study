@@ -42,10 +42,11 @@
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp">
             <EditText
+                android:id="@+id/editText_email"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/email"
-                android:inputType="text"/>
+                android:inputType="textEmailAddress"/>
         </android.support.design.widget.TextInputLayout>
 
         <!--EditText -Password -->
@@ -55,6 +56,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp">
             <EditText
+                android:id="@+id/editText_password"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/password"
@@ -62,6 +64,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
+            android:id="@+id/signIn_button"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="@string/signin_email"
@@ -72,6 +75,7 @@
             android:layout_marginTop="15dp"/>
 
         <Button
+            android:id="@+id/googleLogin_button"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="@string/signin_google"
@@ -82,6 +86,7 @@
             android:layout_marginBottom="5dp"/>
 
         <Button
+            android:id="@+id/facebookLogin_button"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="@string/signin_facebook"
