@@ -154,8 +154,12 @@ class LoginActivity : AppCompatActivity() {
 
     fun handleFacebookAccessToken(token: AccessToken?) {
         var cridential = token?.token?.let { FacebookAuthProvider.getCredential(it) }
-        cridential?.let { auth?.signInWithCredential(it) }
-        movePage(auth?.currentUser)
+        cridential?.let { auth?.signInWithCredential(it)?.addOnCompleteListener {
+            task ->
+            if(task.isSuccessful) {
+                movePage(auth?.currentUser)
+            }
+        } }
     }
     override fun onResume() {
         super.onResume()
