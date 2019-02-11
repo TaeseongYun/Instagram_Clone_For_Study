@@ -97,7 +97,6 @@ class LoginActivity : AppCompatActivity() {
                                .show()
                         Toast.makeText(this, editText_email.toString(), Toast.LENGTH_LONG)
                                 .show()
-                        println("editText에 들어간 아이디 값 -> ${editText_email.text}")
                     }
                 }
     }

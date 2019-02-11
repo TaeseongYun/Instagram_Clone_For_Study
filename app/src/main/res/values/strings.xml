@@ -65,4 +65,7 @@
     <!-- etc -->
     <item name="visible" type="id" />
     <item name="masked" type="id" />
+
+    <!--grant-->
+    <string name="not_grant">권한 불허</string>
 </resources>

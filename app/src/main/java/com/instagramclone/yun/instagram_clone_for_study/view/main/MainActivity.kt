@@ -1,11 +1,18 @@
 package com.instagramclone.yun.instagram_clone_for_study.view.main
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.view.MenuItem
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.instagramclone.yun.instagram_clone_for_study.R
+import com.instagramclone.yun.instagram_clone_for_study.util.myMakeText
 import com.instagramclone.yun.instagram_clone_for_study.util.replace
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -26,26 +33,27 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_home -> {
-                println("1")
                 replace(R.id.main_content, detailViewFragment)
                 return true
             }
             R.id.action_search -> {
-                println("2")
                 replace(R.id.main_content, gridFragment)
                 return true
             }
             R.id.action_gallery -> {
-                println("3")
+                if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                    startActivity(Intent(this, AddPhotoActivity::class.java))
+                } else {
+                    myMakeText(this, R.string.not_grant, Toast.LENGTH_LONG)
+                }
+
                 return true
             }
             R.id.action_favorite -> {
-                println("4")
                 replace(R.id.main_content, alertFragment)
                 return true
             }
             R.id.action_account -> {
-                println("5")
                 replace(R.id.main_content, userFragment)
                 return true
             }
@@ -61,5 +69,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         auth = FirebaseAuth.getInstance()
 
         bottom_navigation.setOnNavigationItemSelectedListener ( this )
+
+        ActivityCompat
+                .requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),1)
     }
 }
