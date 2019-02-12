@@ -48,6 +48,7 @@ class DetailViewFragment : Fragment() {
                 for(snapshot in querySnapshot.documents) {
                     var item = snapshot.toObject(ContentDTO::class.java)
                     contentDTO.add(item)
+
                     contentUidList.add(snapshot.id)
                 }
                 //            새로고침
@@ -59,7 +60,7 @@ class DetailViewFragment : Fragment() {
             return CustomViewHolder(view)
         }
 
-        inner class CustomViewHolder(view: View?) : RecyclerView.ViewHolder(view)
+        private inner class CustomViewHolder(view: View?) : RecyclerView.ViewHolder(view)
 
 
 //        위의 firestore for문 돌때 contentsDTO.add() 추가된 갯수만큼 보여주는것
@@ -80,6 +81,11 @@ class DetailViewFragment : Fragment() {
 
                 //좋아요를 클릭 햇을 경우  containsKey()는 유저 아이디 값이 포함되어있냐 라고 물어보는것
                 val uid = FirebaseAuth.getInstance().currentUser?.uid
+
+                detailviewitem_favorite_imageview.setOnClickListener {
+                    favoriteEvent(position)
+                }
+
                 if(contentDTO[position].favorites.containsKey(uid)) {
                     detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite)
                 }else {
@@ -106,6 +112,7 @@ class DetailViewFragment : Fragment() {
                     contentDTO.favorites[uid] = true
                     contentDTO.favoriteCount += 1
                 }
+                transaction.set(tsDoc, contentDTO)
             }
         }
     }
