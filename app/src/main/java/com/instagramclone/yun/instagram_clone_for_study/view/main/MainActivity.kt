@@ -71,6 +71,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         bottom_navigation.setOnNavigationItemSelectedListener ( this )
 
         ActivityCompat
-                .requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),1)
+                .requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.ACCESS_NETWORK_STATE),1)
     }
 }
