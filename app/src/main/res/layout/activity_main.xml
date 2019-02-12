@@ -7,6 +7,7 @@
     tools:context=".view.main.MainActivity">
 
     <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="35dp">
         <RelativeLayout
@@ -22,7 +23,9 @@
     <FrameLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/my_toolbar"
+        android:layout_above="@+id/bottom_navigation">
 
 
     </FrameLayout>

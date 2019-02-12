@@ -68,9 +68,13 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         auth = FirebaseAuth.getInstance()
 
-        bottom_navigation.setOnNavigationItemSelectedListener ( this )
+        with(bottom_navigation) {
+            setOnNavigationItemSelectedListener(this@MainActivity)
+            selectedItemId = R.id.action_home
+        }
 
         ActivityCompat
-                .requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.ACCESS_NETWORK_STATE),1)
+                .requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE
+                        ,Manifest.permission.ACCESS_NETWORK_STATE),1)
     }
 }
