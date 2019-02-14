@@ -42,13 +42,12 @@ class DetailViewFragment : Fragment() {
             var uid = FirebaseAuth.getInstance().currentUser?.uid
             firestore.collection("image").orderBy("timeStamp").addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 //                새로고침 해주는 코드가 snapshotListener 안에 있어야하는 이유가 바뀔때 마다 for문이 돌기 떄문에 내부에 있어야한다.
+
                 //새로고침 될때마다 누적이 되기 때문에 clear를 해주어야 누적 되지 않는다.
                 contentDTO.clear()
                 contentUidList.clear()
                 for(snapshot in querySnapshot.documents) {
-                    var item = snapshot.toObject(ContentDTO::class.java)
-                    contentDTO.add(item)
-
+                    contentDTO.add(snapshot.toObject(ContentDTO::class.java))
                     contentUidList.add(snapshot.id)
                 }
                 //            새로고침
@@ -56,7 +55,7 @@ class DetailViewFragment : Fragment() {
             }
         }
         override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
-            var view = LayoutInflater.from(parent?.context).inflate(R.layout.item_detail,parent,false)
+            val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_detail,parent,false)
             return CustomViewHolder(view)
         }
 
@@ -97,6 +96,7 @@ class DetailViewFragment : Fragment() {
         private fun favoriteEvent(position: Int) {
             val tsDoc = firestore.collection("image").document(contentUidList[position])
 
+//            이부분 강의 다시 들어보기
             firestore.runTransaction {
                 transaction: Transaction ->
                 val uid = FirebaseAuth.getInstance().currentUser?.uid

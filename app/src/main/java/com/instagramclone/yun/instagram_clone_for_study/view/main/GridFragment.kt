@@ -43,6 +43,7 @@ class GridFragment : Fragment() {
             val width = resources.displayMetrics.widthPixels / 3
 
             val imageView = ImageView(parent?.context).apply {
+                //
                 layoutParams = LinearLayoutCompat.LayoutParams(width, width)
             }
             return CustomViewHolder(imageView)

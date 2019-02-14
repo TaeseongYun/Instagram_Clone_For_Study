@@ -13,6 +13,7 @@ import com.instagramclone.yun.instagram_clone_for_study.R
 import com.instagramclone.yun.instagram_clone_for_study.model.ContentDTO
 import com.instagramclone.yun.instagram_clone_for_study.util.myMakeText
 import kotlinx.android.synthetic.main.activity_add_photo.*
+import com.instagramclone.yun.instagram_clone_for_study.util.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -65,6 +66,8 @@ class AddPhotoActivity : AppCompatActivity() {
         }
     }
     fun contentUpload() {
+        progress_bar.visibility()
+
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val imageFileName = "JPEG_" + timeStamp + "_.png"
         val storageRef = storage.reference.child("images").child(imageFileName)
@@ -94,6 +97,10 @@ class AddPhotoActivity : AppCompatActivity() {
                 setResult(Activity.RESULT_OK)
 
                 finish()
+            }.addOnFailureListener {
+                progress_bar.unvisibility()
+
+                myMakeText(this, R.string.upload_fail, Toast.LENGTH_LONG)
             }
         }
     }
