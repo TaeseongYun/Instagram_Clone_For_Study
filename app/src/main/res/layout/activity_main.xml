@@ -20,6 +20,15 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
+    <!--툴바와 중앙화면을 나누는 선-->
+    <LinearLayout
+        android:id="@+id/toolbar_division"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/my_toolbar"
+        android:background="@color/colorDivision"
+        android:orientation="horizontal" />
+
     <FrameLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"

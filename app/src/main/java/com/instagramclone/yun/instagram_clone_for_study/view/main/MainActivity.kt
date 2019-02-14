@@ -1,6 +1,7 @@
 package com.instagramclone.yun.instagram_clone_for_study.view.main
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
@@ -10,7 +11,10 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.view.MenuItem
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.instagramclone.yun.instagram_clone_for_study.R
 import com.instagramclone.yun.instagram_clone_for_study.util.myMakeText
 import com.instagramclone.yun.instagram_clone_for_study.util.replace
@@ -76,5 +80,28 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         ActivityCompat
                 .requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE
                         ,Manifest.permission.ACCESS_NETWORK_STATE),1)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == UserFragment.callPICK_PROFILE_FROM_ALBUM() && resultCode == Activity.RESULT_OK) {
+            val imageUri = data?.data
+            val auth = FirebaseAuth.getInstance().currentUser?.uid
+            auth?.let {auth ->
+                imageUri?.let { it1 ->
+                    FirebaseStorage.getInstance().reference.child("userProfileImages").child(auth)
+                            .putFile(it1).addOnCompleteListener{
+                                task ->
+                                val url = task.result.downloadUrl.toString()
+                                val map = HashMap<String, Any>()
+
+                                //파이어베이스 데이터베이스는 map으로 되어있음
+                                map["image"] = url
+                                FirebaseFirestore.getInstance().collection("profileImages")
+                                        .document(auth).set(map)
+                            }
+                }
+            }
+        }
     }
 }
