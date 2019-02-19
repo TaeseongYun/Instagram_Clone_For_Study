@@ -40,14 +40,22 @@ class UserFragment : Fragment() {
                     .apply {
                         if(arguments != null) {
                             uid = arguments?.getString("destinationUid")
+                        }else {
+                            uid = currentUserUid
                         }
-                        account_iv_profile.setOnClickListener {
-                            Intent(Intent.ACTION_PICK).apply {
-                                type = "image/*"
-                                activity?.startActivityForResult(this, PICK_PROFILE_FROM_ALBUM)
+
+                        //제 3자 프로필 사진 못바꾸게 막아둠
+                        if( uid == currentUserUid ) {
+                            account_iv_profile.setOnClickListener {
+                                Intent(Intent.ACTION_PICK).apply {
+                                    type = "image/*"
+                                    activity?.startActivityForResult(this, PICK_PROFILE_FROM_ALBUM)
+                                }
                             }
                         }
-                        account_btn_follow_signout.seton
+                        account_btn_follow_signout.setOnClickListener {
+                            requestFollow()
+                        }
                         account_recyclerview.adapter = UserFragmentRecyclerview()
                         account_recyclerview.layoutManager = GridLayoutManager(activity, 3)
                     }
@@ -119,7 +127,7 @@ class UserFragment : Fragment() {
         getProfileImage()
     }
     fun getProfileImage() {
-        currentUserUid?.let {
+        uid?.let {
             firestore.collection("profileImages").document(it).addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
                 if(documentSnapshot.data != null) {
                     val url = documentSnapshot.data["image"]
@@ -129,14 +137,18 @@ class UserFragment : Fragment() {
         }
     }
     inner class UserFragmentRecyclerview : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        val contnetDTO: ArrayList<ContentDTO>
+        val contentDTO: ArrayList<ContentDTO>
         init {
-            contnetDTO = ArrayList()
-            firestore.collection("image").whereEqualTo("uid", currentUserUid).addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            contentDTO = ArrayList()
+            //처음에 whereEqualTo("uid", currentUserUid)로 헀었는데 그러니까 현재 유저 사진만 그려진다.
+            //"uid", uid 로 바꿔주니까 계정에 따라서 올렸던 사진이 변함
+            firestore.collection("image").whereEqualTo("uid", uid).addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                if(querySnapshot == null) return@addSnapshotListener
                 for(snapshot in querySnapshot.documents) {
-                    contnetDTO.add(snapshot.toObject(ContentDTO::class.java))
+                    contentDTO.add(snapshot.toObject(ContentDTO::class.java))
                 }
-
+                account_tv_post_count.text = contentDTO.size.toString()
+                notifyDataSetChanged()
             }
         }
         override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
@@ -150,11 +162,11 @@ class UserFragment : Fragment() {
 
         inner class CustomViewHolder(var imageview: ImageView) : RecyclerView.ViewHolder(imageview)
 
-        override fun getItemCount(): Int = contnetDTO.size
+        override fun getItemCount(): Int = contentDTO.size
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
             (holder as CustomViewHolder).imageview.apply {
-                Glide.with(holder.itemView.context).load(contnetDTO[position].imageUri)
+                Glide.with(holder.itemView.context).load(contentDTO[position].imageUri)
                         .into(this)
             }
 

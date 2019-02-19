@@ -28,9 +28,9 @@ class DetailViewFragment : Fragment() {
                     }
     inner class DetailRecyclerviewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-//        이것은 image파일을 담아주는 배열
+        //        이것은 image파일을 담아주는 배열
         val contentDTO: ArrayList<ContentDTO>
-//        이것은 image 파일 안에 있는 내용을 담아주는 배열
+        //        이것은 image 파일 안에 있는 내용을 담아주는 배열
         val contentUidList: ArrayList<String>
 
         init {
@@ -41,11 +41,12 @@ class DetailViewFragment : Fragment() {
 //            현재 로그인된 유저의 UID(유저 주민등록번호)
             var uid = FirebaseAuth.getInstance().currentUser?.uid
             firestore.collection("image").orderBy("timeStamp").addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-//                새로고침 해주는 코드가 snapshotListener 안에 있어야하는 이유가 바뀔때 마다 for문이 돌기 떄문에 내부에 있어야한다.
+                //                새로고침 해주는 코드가 snapshotListener 안에 있어야하는 이유가 바뀔때 마다 for문이 돌기 떄문에 내부에 있어야한다.
 
                 //새로고침 될때마다 누적이 되기 때문에 clear를 해주어야 누적 되지 않는다.
                 contentDTO.clear()
                 contentUidList.clear()
+                if(querySnapshot == null) return@addSnapshotListener
                 for(snapshot in querySnapshot.documents) {
                     contentDTO.add(snapshot.toObject(ContentDTO::class.java))
                     contentUidList.add(snapshot.id)
@@ -62,13 +63,13 @@ class DetailViewFragment : Fragment() {
         private inner class CustomViewHolder(view: View?) : RecyclerView.ViewHolder(view)
 
 
-//        위의 firestore for문 돌때 contentsDTO.add() 추가된 갯수만큼 보여주는것
+        //        위의 firestore for문 돌때 contentsDTO.add() 추가된 갯수만큼 보여주는것
         override fun getItemCount(): Int = contentDTO.size
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
             //holder가 각기 하나의 아이템들
             (holder as CustomViewHolder).itemView.apply {
-//                유저 id
+                //                유저 id
                 detailviewitem_profile_textview.text = contentDTO[position].userId
 //                이미지
                 Glide.with(holder.itemView.context).load(contentDTO[position].imageUri).into(detailviewitem_imageview_content)
@@ -90,7 +91,30 @@ class DetailViewFragment : Fragment() {
                 }else {
                     detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border)
                 }
-
+                //이부분 공부
+                detailviewitem_profile_image.setOnClickListener {
+                    val fragment = UserFragment()
+                    val bundle = Bundle().apply {
+                        putString("destinationUid",contentDTO[position].uid)
+                    }
+                    with(fragment) {
+                        arguments = bundle
+                    }
+                    activity!!.supportFragmentManager.beginTransaction().replace(R.id.main_content, fragment)
+                            .commit()
+                }
+                //이부분공부
+                detailviewitem_profile_textview.setOnClickListener {
+                    val fragment = UserFragment()
+                    val bundle = Bundle().apply {
+                        putString("destinationUid", contentDTO[position].uid)
+                    }
+                    with(fragment) {
+                        arguments = bundle
+                    }
+                    activity!!.supportFragmentManager.beginTransaction().replace(R.id.main_content,fragment)
+                            .commit()
+                }
             }
         }
         private fun favoriteEvent(position: Int) {
