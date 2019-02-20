@@ -95,7 +95,8 @@ class DetailViewFragment : Fragment() {
                 detailviewitem_profile_image.setOnClickListener {
                     val fragment = UserFragment()
                     val bundle = Bundle().apply {
-                        putString("destinationUid",contentDTO[position].uid)
+                        putString("destinationUid",contentDTO[position].uid)//destinationUid에 contentDTO[position].uid 값을 넣겠다
+                        putString("userId",contentDTO[position].userId)
                     }
                     with(fragment) {
                         arguments = bundle
@@ -107,7 +108,8 @@ class DetailViewFragment : Fragment() {
                 detailviewitem_profile_textview.setOnClickListener {
                     val fragment = UserFragment()
                     val bundle = Bundle().apply {
-                        putString("destinationUid", contentDTO[position].uid)
+                        putString("destinationUid", contentDTO[position].uid)//destinationUid에 contentDTO[position].uid 값을 넣겠다
+                        putString("userId", contentDTO[position].userId)
                     }
                     with(fragment) {
                         arguments = bundle

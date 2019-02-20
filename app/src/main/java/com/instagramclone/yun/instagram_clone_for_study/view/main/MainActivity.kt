@@ -10,14 +10,14 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.instagramclone.yun.instagram_clone_for_study.R
-import com.instagramclone.yun.instagram_clone_for_study.util.myMakeText
-import com.instagramclone.yun.instagram_clone_for_study.util.replace
+import com.instagramclone.yun.instagram_clone_for_study.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         AlertFragment()
     }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        setToolbarDefault()
         when (item.itemId) {
             R.id.action_home -> {
                 replace(R.id.main_content, detailViewFragment)
@@ -59,6 +60,14 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
             R.id.action_account -> {
                 replace(R.id.main_content, userFragment)
+                val uid = FirebaseAuth.getInstance().currentUser?.uid
+                val userFragment = UserFragment()
+                val bundle = Bundle().apply {
+                    putString("destinationUid", uid)
+                }
+                userFragment.arguments = bundle
+                supportFragmentManager.beginTransaction().replace(R.id.main_content, userFragment).commit()
+
                 return true
             }
         }
@@ -82,6 +91,15 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                         ,Manifest.permission.ACCESS_NETWORK_STATE),1)
     }
 
+    override fun onResume() {
+        super.onResume()
+        setToolbarDefault()
+    }
+    fun setToolbarDefault() {
+        toolbar_title_image.visibility = View.VISIBLE
+        toolbar_btn_back.visibility = View.GONE
+        toolbar_userName.visibility = View.GONE
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == UserFragment.callPICK_PROFILE_FROM_ALBUM() && resultCode == Activity.RESULT_OK) {

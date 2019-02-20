@@ -19,13 +19,19 @@ import kotlinx.android.synthetic.main.fragment_grid.view.*
 
 class GridFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            LayoutInflater.from(container?.context).inflate(R.layout.fragment_grid, container, false)
-                    .apply {
-                        gridfragment_recyclerview.adapter = GridFragmentRecyclerviewAdapter()
-                        gridfragment_recyclerview.layoutManager = GridLayoutManager(activity, 3)
-                    }
+    lateinit var mainView: View
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
+        mainView = inflater.inflate(R.layout.fragment_grid, container, false)
+
+        return mainView
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainView.gridfragment_recyclerview.adapter = GridFragmentRecyclerviewAdapter()
+        mainView.gridfragment_recyclerview.layoutManager = GridLayoutManager(activity, 3)
+    }
     inner class GridFragmentRecyclerviewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         var contentDTOs: ArrayList<ContentDTO>
         init {
