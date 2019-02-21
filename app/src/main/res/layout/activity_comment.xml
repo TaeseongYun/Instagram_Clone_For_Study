@@ -11,11 +11,27 @@
         android:layout_width="match_parent"
         android:layout_height="35dp">
 
-        <ImageView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/logo_title"/>
+            android:layout_marginRight="32dp">
+
+            <ImageView
+                android:id="@+id/back_btn"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_arrow_back"
+                android:layout_alignParentLeft="true"
+                />
+            <ImageView
+                android:layout_toRightOf="@+id/back_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/title_comment"/>
+        </RelativeLayout>
+
     </android.support.v7.widget.Toolbar>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -24,11 +40,50 @@
         android:orientation="horizontal"
         android:id="@+id/toolbar_division"></LinearLayout>
 
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:id="@+id/comment_moreInfomation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/my_toolbar">
+        <ImageView
+            android:id="@+id/comment_imageview"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_margin="7.5dp"
+            android:layout_below="@+id/toolbar_division"/>
+
+        <TextView
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:layout_margin="7.5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="글쓴이"
+            android:layout_alignEnd="@+id/comment_imageview"
+            android:layout_alignRight="@+id/comment_imageview" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="글내용" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorDivision"
+        android:layout_below="@+id/comment_moreInfomation"
+        android:orientation="horizontal"></LinearLayout>
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/comment_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar_division"
+        android:layout_below="@+id/comment_moreInfomation"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="30dp"
         ></android.support.v7.widget.RecyclerView>

@@ -1,5 +1,6 @@
 package com.instagramclone.yun.instagram_clone_for_study.view.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Transaction
@@ -69,8 +71,14 @@ class DetailViewFragment : Fragment() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
             //holder가 각기 하나의 아이템들
             (holder as CustomViewHolder).itemView.apply {
+                contentDTO[position].uid?.let { firestore.collection("profileImages").document(it).get().addOnCompleteListener {
+                    task -> val url = task.result["image"]
+                    Glide.with(activity).load(url).apply(RequestOptions().circleCrop())
+                            .into(detailviewitem_profile_image)
+                    }
+                }
                 //                유저 id
-                detailviewitem_profile_textview.text = contentDTO[position].userId
+                detailviewitem_profile_textview.text = contentDTO[position].userId?.substringBefore('@')
 //                이미지
                 Glide.with(holder.itemView.context).load(contentDTO[position].imageUri).into(detailviewitem_imageview_content)
 //                설명 택스트
@@ -116,6 +124,17 @@ class DetailViewFragment : Fragment() {
                     }
                     activity!!.supportFragmentManager.beginTransaction().replace(R.id.main_content,fragment)
                             .commit()
+                }
+
+                detailviewitem_comment_imageview.setOnClickListener {
+                    val commentActivity = CommentActivity()
+                    val bundle = Bundle().apply {
+                        putString("destinationUid", contentDTO[position].uid)
+                    }
+                    with(commentActivity) {
+                        arguments = bundle
+                    }
+                    startActivity(Intent(activity, CommentActivity::class.java))
                 }
             }
         }

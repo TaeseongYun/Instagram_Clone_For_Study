@@ -20,6 +20,8 @@
         <TextView
             android:id="@+id/detailviewitem_profile_textview"
             tools:text = "User Name"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
