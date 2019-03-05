@@ -51,7 +51,9 @@ class DetailViewFragment : Fragment() {
                 if(querySnapshot == null) return@addSnapshotListener
                 for(snapshot in querySnapshot.documents) {
                     contentDTO.add(snapshot.toObject(ContentDTO::class.java))
-                    contentUidList.add(snapshot.id)
+
+                    //contentUidList는 collection 값 담아두는 리스트 즉  컬렉션 id 값
+                   contentUidList.add(snapshot.id)
                 }
                 //            새로고침
                 notifyDataSetChanged()
@@ -126,15 +128,13 @@ class DetailViewFragment : Fragment() {
                             .commit()
                 }
 
+
+                //액티비티는 intent로 putExtra하여 해당되는 유저 id를 넣어준다.
                 detailviewitem_comment_imageview.setOnClickListener {
-                    val commentActivity = CommentActivity()
-                    val bundle = Bundle().apply {
-                        putString("destinationUid", contentDTO[position].uid)
+                    Intent(it.context, CommentActivity::class.java).apply {
+                        putExtra("contentUid", contentUidList[position])
+                        startActivity(this)
                     }
-                    with(commentActivity) {
-                        arguments = bundle
-                    }
-                    startActivity(Intent(activity, CommentActivity::class.java))
                 }
             }
         }
