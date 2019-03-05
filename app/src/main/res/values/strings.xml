@@ -66,6 +66,10 @@
     <item name="visible" type="id" />
     <item name="masked" type="id" />
 
+
+    <!--Writer & Content-->
+    <string name="writer">글쓴이</string>
+    <string name="content">글쓴 내용</string>
     <!--grant-->
     <string name="not_grant">권한 불허</string>
 </resources>

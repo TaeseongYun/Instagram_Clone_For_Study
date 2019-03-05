@@ -46,6 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/my_toolbar">
+
         <ImageView
             android:id="@+id/comment_imageview"
             android:layout_width="35dp"
@@ -54,19 +55,21 @@
             android:layout_below="@+id/toolbar_division"/>
 
         <TextView
+            android:id="@+id/comment_userid"
             android:textColor="@android:color/black"
             android:textStyle="bold"
             android:layout_margin="7.5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="글쓴이"
+            android:text="@string/writer"
             android:layout_alignEnd="@+id/comment_imageview"
             android:layout_alignRight="@+id/comment_imageview" />
 
         <TextView
+            android:id="@+id/comment_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="글내용" />
+            android:text="@string/content" />
 
     </LinearLayout>
 

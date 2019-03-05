@@ -15,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Transaction
 import com.instagramclone.yun.instagram_clone_for_study.R
 import com.instagramclone.yun.instagram_clone_for_study.model.ContentDTO
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
 
@@ -130,9 +131,11 @@ class DetailViewFragment : Fragment() {
 
 
                 //액티비티는 intent로 putExtra하여 해당되는 유저 id를 넣어준다.
+                //댓글 다는 곳에서 글쓴이와 글쓴 내용을 담아두기 위해서 putExtra에 유저 id 를 담아두었음
                 detailviewitem_comment_imageview.setOnClickListener {
                     Intent(it.context, CommentActivity::class.java).apply {
                         putExtra("contentUid", contentUidList[position])
+                        putExtra("contentDestinationUid", contentDTO[position].uid)
                         startActivity(this)
                     }
                 }

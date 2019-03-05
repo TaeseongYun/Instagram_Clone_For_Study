@@ -190,13 +190,13 @@ class UserFragment : Fragment() {
                 val followDTO = documentSnapshot.toObject(FollowDTO::class.java)
                 if(followDTO == null) return@addSnapshotListener
                 fragmentView.account_tv_follower_count.text = followDTO.followerCount.toString()
-                if(followDTO.follwers.containsKey(currentUserUid)) {
+                if( followDTO.follwers.containsKey(currentUserUid) ) {
 
                     with(fragmentView) {
                         account_btn_follow_signout.text = getString(R.string.follow_cancel)
                         account_btn_follow_signout.background
                                 .setColorFilter(ContextCompat.getColor(activity!!, R.color.colorLightGray)
-                                , PorterDuff.Mode.MULTIPLY)
+                                        , PorterDuff.Mode.MULTIPLY)
                     }
 
                 }else {
