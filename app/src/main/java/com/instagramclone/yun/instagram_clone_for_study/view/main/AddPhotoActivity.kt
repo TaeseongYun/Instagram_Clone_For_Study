@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_add_photo.*
 import com.instagramclone.yun.instagram_clone_for_study.util.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.exp
 
 class AddPhotoActivity : AppCompatActivity() {
 
@@ -77,22 +78,22 @@ class AddPhotoActivity : AppCompatActivity() {
                 myMakeText(this, R.string.upload_success, Toast.LENGTH_LONG)
 
                 //uri 은 파일 이름 Url은 http주소 uri는 Url을 포괄 하는것
-                var uri  = taskSnapshot.downloadUrl
+                val uri  = taskSnapshot.downloadUrl
 
-                var contentDTO = ContentDTO()
-                contentDTO.imageUri = uri.toString()
+                ContentDTO().apply {
+                    imageUri = uri.toString()
 
-                contentDTO.uid = auth.currentUser?.uid
+                    uid = auth.currentUser?.uid
 
-                contentDTO.userId = auth.currentUser?.email
+                    userId = auth.currentUser?.email
 
-                contentDTO.explain = addphoto_edit_explain.text.toString()
+                    explain = addphoto_edit_explain.text.toString()
 
+                    //게시물 업로드 시간
+                    this.timeStamp = System.currentTimeMillis()
 
-                //게시물 업로드 시간
-                contentDTO.timeStamp = System.currentTimeMillis()
-
-                firestore.collection("image").document().set(contentDTO)
+                    firestore.collection("image").document().set(this)
+                }
 
                 setResult(Activity.RESULT_OK)
 

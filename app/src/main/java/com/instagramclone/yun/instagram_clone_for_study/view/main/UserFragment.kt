@@ -221,6 +221,7 @@ class UserFragment : Fragment() {
     fun getFollowing() {
         uid?.let {
             firestore.collection("user").document(it).addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+                if(documentSnapshot == null) return@addSnapshotListener
                 val followDTO = documentSnapshot.toObject(FollowDTO::class.java)
                 if(followDTO == null) return@addSnapshotListener
                 fragmentView.account_tv_following_count.text = followDTO.followingCount.toString()

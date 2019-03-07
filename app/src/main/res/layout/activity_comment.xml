@@ -90,11 +90,19 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="30dp"
         ></android.support.v7.widget.RecyclerView>
-    
+
+    <ImageView
+        android:id="@+id/comment_writer_profileimage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/comment_recyclerview"
+        android:layout_margin="10dp"
+        android:layout_toLeftOf="@+id/comment_edit_message"/>
+
     <EditText
         android:layout_toLeftOf="@+id/comment_btn_send"
         android:layout_margin="10dp"
-        android:layout_width="match_parent"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:id="@+id/comment_edit_message"
         android:layout_below="@+id/comment_recyclerview"/>
