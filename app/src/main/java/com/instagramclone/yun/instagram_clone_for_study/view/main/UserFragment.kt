@@ -194,10 +194,14 @@ class UserFragment : Fragment() {
 
                     with(fragmentView) {
                         account_btn_follow_signout.text = getString(R.string.follow_cancel)
-                        account_btn_follow_signout.background
-                                .setColorFilter(ContextCompat.getColor(activity!!, R.color.colorLightGray)
-                                        , PorterDuff.Mode.MULTIPLY)
+                        activity?.let { myActivity -> ContextCompat.getColor(myActivity, R.color.colorLightGray) }
+                                ?.let { myGetColor ->
+                            account_btn_follow_signout.background
+                                    .setColorFilter(myGetColor
+                                            , PorterDuff.Mode.MULTIPLY)
+                        }
                     }
+
 
                 }else {
                     if( uid != currentUserUid ) {
@@ -209,7 +213,6 @@ class UserFragment : Fragment() {
 
                     }
                 }
-
             }
         }
     }
@@ -224,6 +227,7 @@ class UserFragment : Fragment() {
             }
         }
     }
+
     inner class UserFragmentRecyclerview : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val contentDTO: ArrayList<ContentDTO>
         init {
