@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Transaction
 import com.instagramclone.yun.instagram_clone_for_study.R
+import com.instagramclone.yun.instagram_clone_for_study.model.AlarmDTO
 import com.instagramclone.yun.instagram_clone_for_study.model.ContentDTO
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_detail.view.*
@@ -21,11 +22,13 @@ import kotlinx.android.synthetic.main.item_detail.view.*
 
 class DetailViewFragment : Fragment() {
     private lateinit var firestore: FirebaseFirestore
+    private lateinit var user: FirebaseAuth
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             LayoutInflater.from(inflater.context).inflate(R.layout.fragment_detail,container,false)
                     .apply {
                         firestore = FirebaseFirestore.getInstance()
+                        user = FirebaseAuth.getInstance()
                         detailviewfragment_recyclerview.adapter = DetailRecyclerviewAdapter()
                         detailviewfragment_recyclerview.layoutManager = LinearLayoutManager(activity)
                     }
@@ -149,18 +152,32 @@ class DetailViewFragment : Fragment() {
                 transaction: Transaction ->
                 val uid = FirebaseAuth.getInstance().currentUser?.uid
                 val contentDTO = transaction.get(tsDoc).toObject(ContentDTO::class.java)
-                //좋아요 누른 상태
+                //좋아요를 누른 상태 -> 누르지 않은 상태
                 if(contentDTO.favorites.containsKey(uid)) {
                     contentDTO.favoriteCount -= 1
                     contentDTO.favorites.remove(uid)
 
 
                 }else {
-                    //좋아요 누르지 않은 상태
+                    //좋아요 누르지 않은 상태 -> 누르는 상태
                     contentDTO.favorites[uid] = true
                     contentDTO.favoriteCount += 1
+
+                    this.contentDTO[position].uid?.let { favoriteAlarm(it) }
                 }
                 transaction.set(tsDoc, contentDTO)
+            }
+        }
+
+        fun favoriteAlarm(destinationUid: String) {
+            AlarmDTO().apply {
+                this.destinationUid = destinationUid
+                userId = user.currentUser?.email
+                uid = user.currentUser?.uid
+                kind = 0
+                timeStamp = System.currentTimeMillis()
+
+                firestore.collection("alarms").document().set(this)
             }
         }
     }

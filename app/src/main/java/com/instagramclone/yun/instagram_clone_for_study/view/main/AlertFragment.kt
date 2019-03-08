@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_alert.view.*
 
 class AlertFragment : Fragment() {
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             LayoutInflater.from(inflater.context).inflate(R.layout.fragment_alert,container,false)
                     .apply {
