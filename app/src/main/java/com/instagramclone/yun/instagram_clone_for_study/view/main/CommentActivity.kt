@@ -67,6 +67,8 @@ class CommentActivity : AppCompatActivity() {
                         .collection("comment")
                         .document()
                         .set(this)
+
+                comment_edit_message.setText("")
             }
         }
     }
@@ -128,6 +130,8 @@ class CommentActivity : AppCompatActivity() {
             comments = ArrayList()
 
             firestore.collection("image").document(contentUid).collection("comment")
+                    //orderBy String 순서대로 뜨게 만듦
+                    .orderBy("timeStamp")
                     .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                         comments.clear()
                         if(querySnapshot == null) return@addSnapshotListener
@@ -145,7 +149,7 @@ class CommentActivity : AppCompatActivity() {
             return CustomViewHolder(view)
         }
 
-        inner class CustomViewHolder(view: View?) : RecyclerView.ViewHolder(view)
+        private inner class CustomViewHolder(view: View?) : RecyclerView.ViewHolder(view)
 
         override fun getItemCount(): Int = comments.size
 
