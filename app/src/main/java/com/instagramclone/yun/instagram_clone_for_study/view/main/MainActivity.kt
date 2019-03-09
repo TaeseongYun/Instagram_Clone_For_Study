@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -31,8 +30,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private val userFragment: UserFragment by lazy {
         UserFragment()
     }
-    private val alertFragment: AlertFragment by lazy {
-        AlertFragment()
+    private val alarmtFragment: AlarmtFragment by lazy {
+        AlarmtFragment()
     }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         setToolbarDefault()
@@ -55,7 +54,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 return true
             }
             R.id.action_favorite -> {
-                replace(R.id.main_content, alertFragment)
+                replace(R.id.main_content, alarmtFragment)
                 return true
             }
             R.id.action_account -> {

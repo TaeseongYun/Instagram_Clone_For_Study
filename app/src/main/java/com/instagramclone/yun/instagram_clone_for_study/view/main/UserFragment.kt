@@ -19,6 +19,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.instagramclone.yun.instagram_clone_for_study.R
+import com.instagramclone.yun.instagram_clone_for_study.model.AlarmDTO
 import com.instagramclone.yun.instagram_clone_for_study.model.ContentDTO
 import com.instagramclone.yun.instagram_clone_for_study.model.FollowDTO
 import kotlinx.android.synthetic.main.activity_main.*
@@ -131,6 +132,7 @@ class UserFragment : Fragment() {
                 with(followDTO) {
                     followingCount += 1
                     follwings[uid] = true
+                    uid?.let { followerAlarm(it) }
                 }
             }
             tsDocFollowing.let { transaction.set(it, followDTO) }
@@ -184,6 +186,18 @@ class UserFragment : Fragment() {
         }
     }
 
+    fun followerAlarm(destinationUid: String) {
+        AlarmDTO().apply {
+            this.destinationUid = destinationUid
+            userId = auth.currentUser?.uid
+            uid = auth.currentUser?.uid
+            kind = 2
+            timeStamp = System.currentTimeMillis()
+
+
+            firestore.collection("alarms").document().set(this)
+        }
+    }
     fun getFollower() {
         uid?.let {
             firestore.collection("user").document(it).addSnapshotListener { documentSnapshot, firebaseFirestoreException ->

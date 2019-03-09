@@ -139,6 +139,7 @@ class DetailViewFragment : Fragment() {
                     Intent(it.context, CommentActivity::class.java).apply {
                         putExtra("contentUid", contentUidList[position])
                         putExtra("contentDestinationUid", contentDTO[position].uid)
+                        putExtra("destinationUid", contentDTO[position].uid)
                         startActivity(this)
                     }
                 }

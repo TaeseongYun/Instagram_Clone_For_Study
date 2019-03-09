@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.instagramclone.yun.instagram_clone_for_study.R
+import com.instagramclone.yun.instagram_clone_for_study.model.AlarmDTO
 import com.instagramclone.yun.instagram_clone_for_study.model.ContentDTO
 import kotlinx.android.synthetic.main.activity_comment.*
 import kotlinx.android.synthetic.main.item_comment.view.*
@@ -25,8 +26,12 @@ class CommentActivity : AppCompatActivity() {
     private val currentUserUid by lazy {
         FirebaseAuth.getInstance().currentUser?.uid
     }
+    private lateinit var destinationUid: String
     private val firestore: FirebaseFirestore by lazy {
         FirebaseFirestore.getInstance()
+    }
+    private val user: FirebaseAuth by lazy {
+        FirebaseAuth.getInstance()
     }
     private val firestorage by lazy {
         FirebaseStorage.getInstance()
@@ -39,6 +44,7 @@ class CommentActivity : AppCompatActivity() {
         uid = intent.getStringExtra("contentDestinationUid")
 
 
+        destinationUid = intent.getStringExtra("destinationUid")
         back_btn.setOnClickListener {
             finish()
         }
@@ -68,11 +74,25 @@ class CommentActivity : AppCompatActivity() {
                         .document()
                         .set(this)
 
+                commentAlarm(destinationUid, comment_edit_message.text.toString())
                 comment_edit_message.setText("")
             }
         }
     }
 
+
+    fun commentAlarm(destinationUid: String, message: String) {
+        AlarmDTO().apply {
+            this.destinationUid = destinationUid
+            userId = user.currentUser?.email
+            uid = user.currentUser?.uid
+            kind = 1
+            this.message = message
+            timeStamp = System.currentTimeMillis()
+
+            firestore.collection("alarms").document().set(this)
+        }
+    }
     override fun onResume() {
         super.onResume()
         getProfileImage()
@@ -82,11 +102,14 @@ class CommentActivity : AppCompatActivity() {
 
     fun getProfileImage() {
         uid.let {
-            firestore.collection("profileImages").document(it).addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+            firestore.collection("profileImages").document(it)
+                    .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
                 if(documentSnapshot == null) return@addSnapshotListener
                 if(documentSnapshot.data != null) {
                     val url = documentSnapshot.data["image"]
-                    Glide.with(this).load(url).apply( RequestOptions().circleCrop() ).into(comment_imageview)
+                    Glide.with(this).load(url)
+                            .apply( RequestOptions().circleCrop() )
+                            .into(comment_imageview)
                 }
             }
         }
@@ -94,11 +117,14 @@ class CommentActivity : AppCompatActivity() {
 
     fun getCorrentUserImage() {
         currentUserUid?.let {
-            firestore.collection("profileImages").document(it).addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+            firestore.collection("profileImages").document(it)
+                    .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
                 if(documentSnapshot == null) return@addSnapshotListener
                 if(documentSnapshot.data != null) {
                     val url = documentSnapshot.data["image"]
-                    Glide.with(this).load(url).apply( RequestOptions().circleCrop() ).into(comment_writer_profileimage)
+                    Glide.with(this).load(url)
+                            .apply( RequestOptions().circleCrop() )
+                            .into(comment_writer_profileimage)
                 }
             }
         }
@@ -107,7 +133,8 @@ class CommentActivity : AppCompatActivity() {
     //클릭 한곳 유저아이디 받아와서 글쓴 내용 글쓴이 찾기 위함
     fun getWriterContent() {
         uid.let {
-            firestore.collection("image").document(contentUid).addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+            firestore.collection("image").document(contentUid)
+                    .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
                 if(documentSnapshot == null) return@addSnapshotListener
                 if(documentSnapshot.data != null) {
                     documentSnapshot.data["explain"].toString()
