@@ -16,6 +16,7 @@ import com.google.firebase.firestore.Transaction
 import com.instagramclone.yun.instagram_clone_for_study.R
 import com.instagramclone.yun.instagram_clone_for_study.model.AlarmDTO
 import com.instagramclone.yun.instagram_clone_for_study.model.ContentDTO
+import com.instagramclone.yun.instagram_clone_for_study.model.FollowDTO
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
@@ -45,7 +46,21 @@ class DetailViewFragment : Fragment() {
             //orderBy("이름") 해놓으면 시간대별로 정렬된다.
 
 //            현재 로그인된 유저의 UID(유저 주민등록번호)
-            var uid = FirebaseAuth.getInstance().currentUser?.uid
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
+
+            uid?.let { firestore.collection("user").document( it ).get().addOnCompleteListener {
+                task ->
+                    if(task.isSuccessful) {
+                    //결과를 FollowDTO로 캐스팅 하겠다
+                        val userDTO = task.result.toObject(FollowDTO::class.java)
+
+                        userDTO?.let { getContents(it.follwings) }
+                     }
+                }
+            }
+        }
+
+        fun getContents(follower: MutableMap<String, Boolean>?) {
             firestore.collection("image").orderBy("timeStamp").addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 //                새로고침 해주는 코드가 snapshotListener 안에 있어야하는 이유가 바뀔때 마다 for문이 돌기 떄문에 내부에 있어야한다.
 
@@ -54,10 +69,14 @@ class DetailViewFragment : Fragment() {
                 contentUidList.clear()
                 if(querySnapshot == null) return@addSnapshotListener
                 for(snapshot in querySnapshot.documents) {
-                    contentDTO.add(snapshot.toObject(ContentDTO::class.java))
+                    var item = snapshot.toObject(ContentDTO::class.java)
 
-                    //contentUidList는 collection 값 담아두는 리스트 즉  컬렉션 id 값
-                   contentUidList.add(snapshot.id)
+                    //item.uid 라는 것은 ContentDTO로 캐스팅 한것에서 uid 값을 부르는것 following에 하나라도 있으면 가져 오겠다.
+                    if(follower?.keys?.contains(item.uid)!!){
+                        contentDTO.add(item)
+                        //contentUidList는 collection 값 담아두는 리스트 즉  컬렉션 id 값
+                        contentUidList.add(snapshot.id)
+                    }
                 }
                 //            새로고침
                 notifyDataSetChanged()
@@ -69,7 +88,6 @@ class DetailViewFragment : Fragment() {
         }
 
         private inner class CustomViewHolder(view: View?) : RecyclerView.ViewHolder(view)
-
 
         //        위의 firestore for문 돌때 contentsDTO.add() 추가된 갯수만큼 보여주는것
         override fun getItemCount(): Int = contentDTO.size

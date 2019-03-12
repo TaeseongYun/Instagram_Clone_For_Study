@@ -33,7 +33,7 @@ class UserFragment : Fragment() {
     }
     //현재 나의 Uid
     private lateinit var currentUserUid: String
-    var uid: String? = null
+    private var uid: String? = null
     private lateinit var auth: FirebaseAuth
     lateinit var fragmentView: View
 
@@ -114,7 +114,7 @@ class UserFragment : Fragment() {
                 //아무도 팔로잉 하지 않았을 경우
                 followDTO = FollowDTO().apply {
                     followingCount = 1
-                    follwings[uid] = true
+                    uid?.let { follwings[it] = true }
                 }
                 tsDocFollowing.let { tsDoc -> followDTO?.let { follow -> transaction.set(tsDoc, follow) } }
                 return@runTransaction
@@ -131,7 +131,7 @@ class UserFragment : Fragment() {
                 //내가 제 3자 팔로잉 하지 않았을 경우 -> 제 3자가 나를 팔로워 한다.
                 with(followDTO) {
                     followingCount += 1
-                    follwings[uid] = true
+                    uid?.let { follwings[it] = true }
                     uid?.let { followerAlarm(it) }
                 }
             }

@@ -67,6 +67,16 @@ class GridFragment : Fragment() {
                                 .load(contentDTOs[position].imageUri)
                                 .apply { RequestOptions().centerCrop() }
                                 .into(this)
+                        setOnClickListener { val fragment = UserFragment()
+                            val bundle = Bundle().apply {
+                                putString("destinationUid", contentDTOs[position].uid)
+                                putString("userId", contentDTOs[position].userId)
+                            }
+                            fragment.arguments = bundle
+                            activity?.supportFragmentManager?.beginTransaction()
+                                    ?.replace(R.id.main_content, fragment)
+                                    ?.commit()
+                        }
                     }
         }
 
