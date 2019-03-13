@@ -14,6 +14,7 @@ import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.instagramclone.yun.instagram_clone_for_study.R
 import com.instagramclone.yun.instagram_clone_for_study.util.*
@@ -88,8 +89,18 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         ActivityCompat
                 .requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE
                         ,Manifest.permission.ACCESS_NETWORK_STATE),1)
+        registerPushToken()
     }
 
+    fun registerPushToken() {
+        val pushToken = FirebaseInstanceId.getInstance().token
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        var map = mutableMapOf<String, Any>()
+        pushToken?.let { map["pushtoken"] = it }
+        uid?.let { FirebaseFirestore.getInstance().collection("pushtokens").document(it)
+                .set(map)
+        }
+    }
     override fun onResume() {
         super.onResume()
         setToolbarDefault()
