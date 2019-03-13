@@ -73,6 +73,8 @@ class GridFragment : Fragment() {
                                 putString("userId", contentDTOs[position].userId)
                             }
                             fragment.arguments = bundle
+                            //프래그먼트 같은 경우에는 supportFragmentManager를 바로 못쓴다.
+                            //context를 가져와야 하는데 fragment 는 activity를 써서 불러온다
                             activity?.supportFragmentManager?.beginTransaction()
                                     ?.replace(R.id.main_content, fragment)
                                     ?.commit()
