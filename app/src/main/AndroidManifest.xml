@@ -10,9 +10,17 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- 안드로이드 8.0 이상 푸시 처리 추가 코드 -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_baseline_local_play_24px"/>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@color/colorAccent"/>
         <activity android:name=".view.main.CommentActivity"></activity>
         <activity android:name=".view.main.AddPhotoActivity" />
         <activity android:name=".view.main.LoginActivity">
