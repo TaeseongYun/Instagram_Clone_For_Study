@@ -54,7 +54,9 @@ class DetailViewFragment : Fragment() {
                     //결과를 FollowDTO로 캐스팅 하겠다
                         val userDTO = task.result.toObject(FollowDTO::class.java)
 
-                        userDTO?.let { getContents(it.follwings) }
+                        if(userDTO?.follwings != null) {
+                            getContents(userDTO.follwings)
+                        }
                      }
                 }
             }
@@ -69,7 +71,7 @@ class DetailViewFragment : Fragment() {
                 contentUidList.clear()
                 if(querySnapshot == null) return@addSnapshotListener
                 for(snapshot in querySnapshot.documents) {
-                    var item = snapshot.toObject(ContentDTO::class.java)
+                    val item = snapshot.toObject(ContentDTO::class.java)
 
                     //item.uid 라는 것은 ContentDTO로 캐스팅 한것에서 uid 값을 부르는것 following에 하나라도 있으면 가져 오겠다.
                     if(follower?.keys?.contains(item.uid)!!){
