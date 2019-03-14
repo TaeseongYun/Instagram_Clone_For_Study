@@ -14,14 +14,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- 안드로이드 8.0 이상 푸시 처리 추가 코드 -->
-        <!--<meta-data-->
-            <!--android:name="com.google.firebase.messaging.default_notification_icon"-->
-            <!--android:resource="@drawable/ic_baseline_local_play_24px"/>-->
-        <!--<meta-data-->
-            <!--android:name="com.google.firebase.messaging.default_notification_icon"-->
-            <!--android:resource="@color/colorAccent"/>-->
+
+
         <activity android:name=".view.main.CommentActivity"></activity>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/push_icon"/>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent"/>
+
+        <meta-data
+            android:name="firebase.messaging_auto_init_enabled"
+            android:value="false"/>
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false"/>
+
         <activity android:name=".view.main.AddPhotoActivity" />
         <activity android:name=".view.main.LoginActivity">
             <intent-filter>

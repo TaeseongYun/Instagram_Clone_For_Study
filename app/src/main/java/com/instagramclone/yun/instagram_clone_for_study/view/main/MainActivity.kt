@@ -96,7 +96,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         val pushToken = FirebaseInstanceId.getInstance().token
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         var map = mutableMapOf<String, Any>()
-        pushToken?.let { map["pushtoken"] = it }
+
+        //pushToken != null 일때 map.put("pushtoken", pushToken) 해주는 코드드
+       pushToken?.let { map["pushtoken"] = it }
         uid?.let { FirebaseFirestore.getInstance().collection("pushtokens").document(it)
                 .set(map)
         }
