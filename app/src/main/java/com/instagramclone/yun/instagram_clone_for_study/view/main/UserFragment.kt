@@ -37,6 +37,7 @@ class UserFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     lateinit var fragmentView: View
 
+    private lateinit var fcmPush: FcmPush
     companion object {
         private val PICK_PROFILE_FROM_ALBUM = 10
 
@@ -51,6 +52,7 @@ class UserFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
         currentUserUid = auth.currentUser?.uid!!
+        fcmPush = FcmPush()
 
         if(arguments != null) {
             uid = arguments!!.getString("destinationUid")
@@ -197,6 +199,8 @@ class UserFragment : Fragment() {
 
             firestore.collection("alarms").document().set(this)
         }
+        val message = auth.currentUser?.email + getString(R.string.alarm_follow)
+        fcmPush.sendMessage(destinationUid, "알림 메세지 입니다.", message)
     }
     fun getFollower() {
         uid?.let {

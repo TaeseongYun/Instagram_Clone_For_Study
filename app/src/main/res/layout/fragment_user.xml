@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp">
         <ImageView
+            android:layout_margin="8dp"
             android:id="@+id/account_iv_profile"
             tools:src = "@drawable/ic_account"
             android:layout_width="100dp"

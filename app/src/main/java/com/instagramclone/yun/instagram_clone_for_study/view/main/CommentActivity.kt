@@ -30,6 +30,9 @@ class CommentActivity : AppCompatActivity() {
     private val firestore: FirebaseFirestore by lazy {
         FirebaseFirestore.getInstance()
     }
+    private val fcmPush: FcmPush by lazy {
+        FcmPush()
+    }
     private val user: FirebaseAuth by lazy {
         FirebaseAuth.getInstance()
     }
@@ -92,6 +95,8 @@ class CommentActivity : AppCompatActivity() {
 
             firestore.collection("alarms").document().set(this)
         }
+        val fcmMessage = user.currentUser?.email + getString(R.string.alarm_comment)
+        fcmPush.sendMessage(destinationUid, "알림 메세지 입니다.", fcmMessage)
     }
     override fun onResume() {
         super.onResume()
@@ -149,6 +154,7 @@ class CommentActivity : AppCompatActivity() {
             }
         }
     }
+
 
     inner class CommentRecyclerview : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         //초기화 블록

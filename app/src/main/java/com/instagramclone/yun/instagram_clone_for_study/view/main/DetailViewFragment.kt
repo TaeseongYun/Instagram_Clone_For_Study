@@ -24,12 +24,13 @@ import kotlinx.android.synthetic.main.item_detail.view.*
 class DetailViewFragment : Fragment() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var user: FirebaseAuth
-
+    private lateinit var fcmPush: FcmPush
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             LayoutInflater.from(inflater.context).inflate(R.layout.fragment_detail,container,false)
                     .apply {
                         firestore = FirebaseFirestore.getInstance()
                         user = FirebaseAuth.getInstance()
+                        fcmPush = FcmPush()
                         detailviewfragment_recyclerview.adapter = DetailRecyclerviewAdapter()
                         detailviewfragment_recyclerview.layoutManager = LinearLayoutManager(activity)
                     }
@@ -41,8 +42,8 @@ class DetailViewFragment : Fragment() {
         val contentUidList: ArrayList<String>
 
         init {
-            contentDTO = ArrayList<ContentDTO>()
-            contentUidList = ArrayList<String>()
+            contentDTO = ArrayList()
+            contentUidList = ArrayList()
             //orderBy("이름") 해놓으면 시간대별로 정렬된다.
 
 //            현재 로그인된 유저의 UID(유저 주민등록번호)
@@ -200,6 +201,9 @@ class DetailViewFragment : Fragment() {
 
                 firestore.collection("alarms").document().set(this)
             }
+
+            val message = user.currentUser?.email + getString(R.string.alarm_favorite)
+            fcmPush.sendMessage(destinationUid, "알림 메세지 입니다.", message)
         }
     }
 

@@ -16,20 +16,16 @@
 
 
 
-        <activity android:name=".view.main.CommentActivity"></activity>
+        <activity android:name=".view.main.CommentActivity"
+            android:windowSoftInputMode="adjustPan">
+
+        </activity>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/push_icon"/>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent"/>
-
-        <meta-data
-            android:name="firebase.messaging_auto_init_enabled"
-            android:value="false"/>
-        <meta-data
-            android:name="firebase_analytics_collection_enabled"
-            android:value="false"/>
 
         <activity android:name=".view.main.AddPhotoActivity" />
         <activity android:name=".view.main.LoginActivity">
